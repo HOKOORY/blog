@@ -1,0 +1,59 @@
+server:
+  port: 8090
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: user-service
+  # mysql配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/blogt?characterEncoding=utf-8&useSSL=true&serverTimezone=GMT
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 30000
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    database: 0
+#  data:
+#    mongodb:
+#      uri: mongodb+srv://hokoory:HEjiale5201314@cluster0.fyrww.azure.mongodb.net/ho?retryWrites=true&w=majority
+# Mybatis 配置
+mybatis:
+  mapper-locations: classpath:/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+#dubbo:
+#  application:
+#    name: ${spring.application.name}
+#    id: ${spring.application.name}
+#  consumer:
+#    check: false
+#    timeout: 3000
+#  registry:
+#    address: spring-cloud://127.0.0.1:8848
+#  protocol:
+#    name: dubbo
+#    port: 20880
+#  scan:
+#    base-packages: com.ho.blogt.service
+#  provider:
+#    scope: remote
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql

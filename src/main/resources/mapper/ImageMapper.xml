@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ho.blogt.mapper.ImageMpper">
+    <select id="getImageBySha512" resultType="com.ho.blogt.entity.Image">
+        select * from image where sha512 = #{sha512}
+    </select>
+
+    <insert id="insertImage" parameterType="com.ho.blogt.entity.Image" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into image(file_name,sha512,create_time)
+        value (#{fileName},#{sha512},#{createTime})
+    </insert>
+</mapper>

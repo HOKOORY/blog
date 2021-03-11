@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ho.blogt.mapper.ArticleLikeMapper">
+    <select id="getArticleLikeList" resultMap="listArticleLike">
+        select article_like.id,
+               article_like.user_id,
+               article_like.article_id,
+               article_like.create_time,
+               u.id as user_id,
+               u.avatar,
+               u.name
+        from article_like
+                     LEFT JOIN `user` u ON article_like.user_id = u.id
+                where article_like.article_id = #{articleId}
+        <if test="startTime != null and endTime != null">
+            AND article_like.create_time &gt;= #{startTime}
+            AND article_like.create_time &lt;= #{endTime}
+        </if>
+        ORDER BY article_like.create_time
+    </select>
+
+    <resultMap id="listArticleLike" type="com.ho.blogt.entity.ArticleLike">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="article_id" property="articleId"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="user" ofType="com.ho.blogt.entity.User">
+            <id column="user_id" property="id"/>
+            <result column="avatar" property="avatar"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getUserLikeArticleList" resultMap="listUserLike">
+        select article_like.id,
+               article_like.article_id,
+               article_like.create_time,
+               article.id as article_id,
+               article.like_sum,
+               article.read_sum,
+               article.title
+        from article_like
+                     LEFT JOIN article ON article_like.article_id = article.id
+                where article_like.user_id = #{userId}
+                  AND article.is_show = 1
+        <if test="startTime != null and endTime != null">
+            AND article_like.create_time &gt;= #{startTime}
+            AND article_like.create_time &lt;= #{endTime}
+        </if>
+        ORDER BY article_like.create_time
+    </select>
+    <resultMap id="listUserLike" type="com.ho.blogt.entity.ArticleLike">
+        <id column="id" property="id"/>
+        <result column="article_id" property="articleId"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="article" ofType="com.ho.blogt.entity.Article">
+            <id column="article_id" property="id"/>
+            <result column="like_sum" property="likeSum"/>
+            <result column="read_sum" property="readSum"/>
+            <result column="title" property="title"/>
+        </collection>
+    </resultMap>
+
+    <select id="getArticleLikeByUser" resultMap="listArticleLike">
+        select *
+        from article_like
+        where article_like.user_id = #{userId}
+          and article_like.article_id = #{articleId}
+    </select>
+
+    <insert id="insertArticleLike" parameterType="com.ho.blogt.entity.ArticleLike" useGeneratedKeys="true"
+            keyProperty="articleLike.id">
+        insert into article_like(user_id, article_id, create_time, update_time)
+        values (#{articleLike.userId}, #{articleLike.articleId}, #{articleLike.createTime}, #{articleLike.updateTime})
+    </insert>
+
+</mapper>

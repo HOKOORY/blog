@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ho.blogt.mapper.ArticleTagMapper">
+    <insert id="insertArticleTag" useGeneratedKeys="true" parameterType="com.ho.blogt.entity.ArticleTag"
+            keyProperty="articleTag.id">
+        insert into article_tag(article_id, tag_id, create_time, update_time)
+        values (#{articleTag.articleId}, #{articleTag.tagId}, #{articleTag.createTime}, #{articleTag.updateTime})
+    </insert>
+</mapper>
