@@ -15,6 +15,14 @@ public class UserController {
     @Autowired
     TokenService tokenService;
 
+    /**
+     * 登录接口
+     *
+     * @param name     用户名
+     * @param password 密码
+     * @param token    token 用于直接获取用户信息
+     * @return
+     */
     @PostMapping(value = "/login")
     public Response login(@RequestParam(name = "name") String name,
                           @RequestParam(name = "password") String password,
@@ -27,6 +35,15 @@ public class UserController {
         return new Response(user);
     }
 
+    /**
+     * 注册用户
+     *
+     * @param name        用户名
+     * @param password    密码
+     * @param avatar      头像
+     * @param phoneNumber 手机号码
+     * @return
+     */
     @PostMapping(value = "/register")
     public Response register(@RequestParam(name = "name") String name,
                              @RequestParam(name = "password") String password,

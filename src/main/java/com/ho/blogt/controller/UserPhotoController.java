@@ -23,6 +23,13 @@ public class UserPhotoController {
     @Autowired
     TokenService tokenService;
 
+    /**
+     * 上传自己的照片
+     * @param token token header传
+     * @param imageId 图片ID 访问/common/uploadImage接口获取
+     * @param status 状态是否公开 1公开  2家庭成员  3自己
+     * @return
+     */
     @PostMapping("/uploadPhoto")
     public Response uploadPhoto(@RequestHeader(name = "token", required = false, defaultValue = "0") String token,
                                 @RequestParam("imageId") long imageId, @RequestParam("status") int status) {
@@ -36,6 +43,14 @@ public class UserPhotoController {
         return new Response(userPhotoService.insertUserPhoto(user.getId(), imageId, status));
     }
 
+    /**
+     * 获取自己照片的列表
+     * @param token token header传
+     * @param startTime 筛选条件
+     * @param endTime 筛选条件
+     * @param pageRequest 分页 page/limit
+     * @return
+     */
     @GetMapping("/userPhotoList")
     public Response getUserPhotoList(@RequestHeader(name = "token", required = false, defaultValue = Constant.DEFAULT_VALUE) String token,
                                      @RequestParam(value = "startTime", required = false, defaultValue = Constant.DEFAULT_VALUE) String startTime,
@@ -62,6 +77,12 @@ public class UserPhotoController {
         return new Response(userPhotoService.getUserPhotoList(user.getId(), startDateTime, endDateTime, pageRequest));
     }
 
+    /**
+     * 删除自己的某张照片
+     * @param photoId 照片ID
+     * @param token token header传
+     * @return
+     */
     @PostMapping("/deleteUserPhoto")
     public Response deleteUserPhoto(@RequestParam("photoId") long photoId,
                                     @RequestHeader(name = "token") String token) {

@@ -41,9 +41,10 @@ public class ArticleController {
     /**
      * 文章列表
      *
-     * @param tagId     筛选条件，通过标签筛选
-     * @param startTime 筛选条件，通过时间范围筛选 startTime和endTime必须同时传
-     * @param endTime   筛选条件，通过时间范围筛选
+     * @param tagId       筛选条件，通过标签筛选
+     * @param startTime   筛选条件，通过时间范围筛选 startTime和endTime必须同时传
+     * @param endTime     筛选条件，通过时间范围筛选
+     * @param pageRequest 分页 page/limit
      * @return
      */
     @GetMapping("/articleList")
@@ -68,10 +69,11 @@ public class ArticleController {
     /**
      * 获取用户文章列表
      *
-     * @param tagId     筛选条件，通过标签筛选
-     * @param startTime 筛选条件，通过时间范围筛选 startTime和endTime必须同时传
-     * @param endTime   筛选条件，通过时间范围筛选
-     * @param token     必传的头信息，通过这个参数获取用户信息，登录接口可获取该参数
+     * @param tagId       筛选条件，通过标签筛选
+     * @param startTime   筛选条件，通过时间范围筛选 startTime和endTime必须同时传
+     * @param endTime     筛选条件，通过时间范围筛选
+     * @param token       必传的头信息，通过这个参数获取用户信息，登录接口可获取该参数
+     * @param pageRequest 分页 page/limit
      * @return
      */
     @GetMapping("/articleListByUserId")
@@ -102,10 +104,11 @@ public class ArticleController {
     /**
      * 文章点赞列表 关联用户表
      *
-     * @param token
-     * @param articleId
-     * @param startTime
-     * @param endTime
+     * @param token       token
+     * @param articleId   文章id
+     * @param startTime   筛选条件
+     * @param endTime     筛选条件
+     * @param pageRequest 分页 page/limit
      * @return
      */
     @GetMapping("/articleLikeList")
@@ -133,6 +136,15 @@ public class ArticleController {
         return new Response(articleLikeService.getArticleLikeList(articleId, startDateTime, endDateTime, pageRequest));
     }
 
+    /**
+     * 获取文章内容
+     *
+     * @param token     token
+     * @param articleId 文章ID
+     * @param deviceId  设备唯一ID
+     * @param request   用于获取IP地址
+     * @return
+     */
     @GetMapping("/articleDetail")
     public Response getArticleDetail(@RequestHeader(name = "token", required = false, defaultValue = Constant.DEFAULT_VALUE) String token,
                                      @RequestParam(value = "articleId", required = true) long articleId,
@@ -147,17 +159,27 @@ public class ArticleController {
         return new Response(articleService.getArticleDetail(articleId, userId, deviceId, ip));
     }
 
-
+    /**
+     * 发布文章
+     *
+     * @param token      token 验证登录状态和获取用户ID
+     * @param title      标题
+     * @param tagsId     类型ID
+     * @param context    内容 是富文本
+     * @param isShow     是否对外显示
+     * @param canComment 是否能评论
+     * @return
+     */
     @PostMapping("/releaseArticle")
     public Response releaseArticle(@RequestHeader(name = "token", defaultValue = Constant.DEFAULT_VALUE) String token,
                                    @RequestParam(value = "title") String title, @RequestParam(value = "tagsId[]") long[] tagsId,
-                                   @RequestParam(value = "context") String context,@RequestParam(value = "isShow") int isShow,
+                                   @RequestParam(value = "context") String context, @RequestParam(value = "isShow") int isShow,
                                    @RequestParam(value = "canComment") int canComment) {
         User user = (User) tokenService.getToken(token);
         if (null == user) {
             // 抛出未登录异常
             throw new HttpException(ErrorCodeAndMsg.USER_NOT_LOGIN);
         }
-        return new Response(articleService.insertArticle(user.getId(), title,tagsId,context,isShow,canComment));
+        return new Response(articleService.insertArticle(user.getId(), title, tagsId, context, isShow, canComment));
     }
 }

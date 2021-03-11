@@ -23,6 +23,15 @@ public class ArticleLikeConrtoller {
     @Autowired
     TokenService tokenService;
 
+    /**
+     * 我的文章的点赞文章列表
+     *
+     * @param token       token header传
+     * @param startTime   筛选条件
+     * @param endTime     筛选条件
+     * @param pageRequest 分页 page/limit
+     * @return
+     */
     @GetMapping("myArticleLike")
     public Response getMyArticleLike(@RequestHeader(name = "token", required = false, defaultValue = Constant.DEFAULT_VALUE) String token,
                                      @RequestParam(value = "startTime", required = false, defaultValue = Constant.DEFAULT_VALUE) String startTime,
@@ -47,6 +56,13 @@ public class ArticleLikeConrtoller {
         return new Response(articleLikeService.getUserLikeArticleList(user.getId(), startDateTime, endDateTime, pageRequest));
     }
 
+    /**
+     * 用于判断是否点赞该文章 1是点赞了，0是没点赞
+     *
+     * @param token     token
+     * @param articleId 文章ID
+     * @return
+     */
     @GetMapping("isLikeArticle")
     public Response isLikeArticle(@RequestHeader(name = "token", required = false, defaultValue = Constant.DEFAULT_VALUE) String token,
                                   @RequestParam(value = "articleId", required = true) long articleId) {
@@ -58,6 +74,13 @@ public class ArticleLikeConrtoller {
         return new Response(articleLikeService.isLikeArticle(user.getId(), articleId) ? 1 : 0);
     }
 
+    /**
+     * 点赞文章
+     *
+     * @param token     token
+     * @param articleId 文章ID
+     * @return
+     */
     @PostMapping("likeArticle")
     public Response LikeArticle(@RequestHeader(name = "token", required = false, defaultValue = Constant.DEFAULT_VALUE) String token,
                                 @RequestParam(value = "articleId", required = true) long articleId) {
