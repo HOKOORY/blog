@@ -182,4 +182,41 @@ public class ArticleController {
         }
         return new Response(articleService.insertArticle(user.getId(), title, tagsId, context, isShow, canComment));
     }
+
+    @PostMapping("/editArticle")
+    public Response editArticle(@RequestHeader(name = "token", defaultValue = Constant.DEFAULT_VALUE) String token,
+                                @RequestParam(value = "title", required = false, defaultValue = Constant.DEFAULT_VALUE) String title,
+                                @RequestParam(value = "tagsId[]", required = false, defaultValue = Constant.DEFAULT_VALUE) long[] tagsId,
+                                @RequestParam(value = "context", required = false, defaultValue = Constant.DEFAULT_VALUE) String context,
+                                @RequestParam(value = "isShow", required = false, defaultValue = Constant.DEFAULT_VALUE) int isShow,
+                                @RequestParam(value = "canComment", required = false, defaultValue = Constant.DEFAULT_VALUE) int canComment,
+                                @RequestParam(value = "articleId", required = false, defaultValue = Constant.DEFAULT_VALUE) int articleId) {
+        User user = (User) tokenService.getToken(token);
+        if (null == user) {
+            // 抛出未登录异常
+            throw new HttpException(ErrorCodeAndMsg.USER_NOT_LOGIN);
+        }
+        return new Response();
+    }
+
+    /**
+     * 评论文章
+     *
+     * @param token     token
+     * @param context   内容
+     * @param articleId 文章ID
+     * @param parentId  父节点ID
+     * @return
+     */
+    @PostMapping("/commentArticle")
+    public Response commentArticle(@RequestHeader(name = "token", defaultValue = Constant.DEFAULT_VALUE) String token,
+                                   @RequestParam(value = "context") String context, @RequestParam(value = "articleId") long articleId,
+                                   @RequestParam(value = "parentId", required = false, defaultValue = Constant.DEFAULT_VALUE) long parentId) {
+        User user = (User) tokenService.getToken(token);
+        if (null == user) {
+            // 抛出未登录异常
+            throw new HttpException(ErrorCodeAndMsg.USER_NOT_LOGIN);
+        }
+        return new Response(articleService.commentArticle(articleId, user.getId(), parentId, context));
+    }
 }

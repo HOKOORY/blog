@@ -36,13 +36,25 @@ public interface ArticleService {
 
     /**
      * 发布文章
-     * @param userId 用户ID
-     * @param title 标题
-     * @param tagsId 文章所拥有的标签
-     * @param context 内容，富文本
-     * @param isShow 是否让大众可看 1显示  2不显示
+     *
+     * @param userId     用户ID
+     * @param title      标题
+     * @param tagsId     文章所拥有的标签
+     * @param context    内容，富文本
+     * @param isShow     是否让大众可看 1显示  2不显示
      * @param canComment 是否能评论 1可以评论  2不可以评论
      * @return
      */
-    long insertArticle(long userId, String title, long[] tagsId, String context,int isShow,int canComment);
+    long insertArticle(long userId, String title, long[] tagsId, String context, int isShow, int canComment);
+
+    /**
+     * 评论文章
+     *
+     * @param articleId 文章ID
+     * @param userId    用户ID
+     * @param parentId  父节点ID
+     * @param context   内容
+     * @return
+     */
+    long commentArticle(long articleId, long userId, long parentId, String context);
 }

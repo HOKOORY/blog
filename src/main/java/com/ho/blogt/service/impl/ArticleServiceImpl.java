@@ -30,6 +30,8 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleContextMapper articleContextMapper;
     @Autowired
     ArticleTagMapper articleTagMapper;
+    @Autowired
+    ArticleCommentMapper articleCommentMapper;
 
     @Override
     public PageResult getArticleListForIndex() {
@@ -85,7 +87,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional(rollbackFor = {RuntimeException.class})
-    public long insertArticle(long userId, String title, long[] tagsId, String context, int isShow,int canComment) {
+    public long insertArticle(long userId, String title, long[] tagsId, String context, int isShow, int canComment) {
         Article article = new Article();
         ArticleContext articleContext = new ArticleContext();
         ArticleTag articleTag = new ArticleTag();
@@ -120,5 +122,26 @@ public class ArticleServiceImpl implements ArticleService {
         return 0;
     }
 
+    @Override
+    public long commentArticle(long articleId, long userId, long parentId, String context) {
+        Article article = articleMapper.getArticleDetail(articleId);
+        if (null == article) {
+            throw new HttpException(ErrorCodeAndMsg.ARTICLE_NOT_EXIST);
+        }
+        if (parentId != 0L) {
+            ArticleComment articleComment = articleCommentMapper.selectById(parentId);
+            if (null == articleComment) {
+                throw new HttpException(ErrorCodeAndMsg.COMMENT_NOT_EXIST);
+            }
+        }
+        ArticleComment articleComment = new ArticleComment();
+        articleComment.setArticleId(articleId);
+        articleComment.setContext(context);
+        articleComment.setUserId(userId);
+        articleComment.setParentId(parentId);
+        articleComment.setCreateTime(new Date());
+        articleComment.setUpdateTime(new Date());
+        return articleCommentMapper.insertArticleComment(articleComment);
+    }
 
 }

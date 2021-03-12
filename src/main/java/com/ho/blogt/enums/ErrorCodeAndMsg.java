@@ -13,9 +13,11 @@ public enum ErrorCodeAndMsg {
     NOT_IMAGE("10001", "该文件不是图片格式"),
     IMAGE_NULL("10002", "该图片为空"),
     UPLOAD_IMAGE_FAIL("10003", "上传图片失败"),
-    DATEFORMAT_ERROR("20001", "时间格式不一致"),
     USER_LIKED("10004", "已经点过赞啦，不要再点了，受不了！"),
+    DATEFORMAT_ERROR("20001", "时间格式不一致"),
     PHOTO_IS_NOT_YOUR("30001", "该图片不是你的，你没有权限删除"),
+    ARTICLE_NOT_EXIST("40001", "该文章不存在"),
+    COMMENT_NOT_EXIST("40002", "该评论不存在"),
     ;
 
     private String code;
