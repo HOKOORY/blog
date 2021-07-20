@@ -17,11 +17,13 @@ public class LoginInterceptorConfig implements WebMvcConfigurer {
     public LoginInterceptor LoginInterceptor() {
         return new LoginInterceptor();
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration registration = registry.addInterceptor(LoginInterceptor());
         registration.addPathPatterns("/**");
         ArrayList<String> list = new ArrayList<>();
+        // 使用list来存储不需要验证的登录的api
         list.add("/user/login");
         list.add("/user/cansignup");
         list.add("/user/register");

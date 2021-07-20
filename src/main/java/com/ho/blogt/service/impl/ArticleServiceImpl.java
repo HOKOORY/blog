@@ -86,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class})
+    @Transactional(rollbackFor = {HttpException.class})
     public long insertArticle(long userId, String title, long[] tagsId, String context, int isShow, int canComment) {
         Article article = new Article();
         ArticleContext articleContext = new ArticleContext();
@@ -127,6 +127,9 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleMapper.getArticleDetail(articleId);
         if (null == article) {
             throw new HttpException(ErrorCodeAndMsg.ARTICLE_NOT_EXIST);
+        }
+        if (2 == article.getCanComment()){
+            throw new HttpException(ErrorCodeAndMsg.ARTICLE_CAN_NOT_COMMENT);
         }
         if (parentId != 0L) {
             ArticleComment articleComment = articleCommentMapper.selectById(parentId);

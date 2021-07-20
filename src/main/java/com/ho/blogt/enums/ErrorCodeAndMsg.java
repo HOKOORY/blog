@@ -18,6 +18,7 @@ public enum ErrorCodeAndMsg {
     PHOTO_IS_NOT_YOUR("30001", "该图片不是你的，你没有权限删除"),
     ARTICLE_NOT_EXIST("40001", "该文章不存在"),
     COMMENT_NOT_EXIST("40002", "该评论不存在"),
+    ARTICLE_CAN_NOT_COMMENT("40003", "该文章不允许评论"),
     ;
 
     private String code;

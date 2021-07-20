@@ -2,6 +2,7 @@ package com.ho.blogt.utils;
 
 /**
  * @author 63408
+ * 常量池
  */
 public interface Constant {
     int LIMIT = 20;

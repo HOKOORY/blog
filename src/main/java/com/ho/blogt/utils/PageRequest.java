@@ -11,5 +11,5 @@ public class PageRequest {
     /**
      * 每页数量
      */
-    private int limit = 2;
+    private int limit = Constant.LIMIT;
 }

@@ -183,6 +183,18 @@ public class ArticleController {
         return new Response(articleService.insertArticle(user.getId(), title, tagsId, context, isShow, canComment));
     }
 
+    /**
+     * 编辑已发布文章
+     *
+     * @param token      token 验证登录状态和获取用户ID
+     * @param title      标题
+     * @param tagsId     类型ID
+     * @param context    内容 是富文本
+     * @param isShow     是否对外显示
+     * @param canComment 是否能评论
+     * @param articleId  文章ID
+     * @return
+     */
     @PostMapping("/editArticle")
     public Response editArticle(@RequestHeader(name = "token", defaultValue = Constant.DEFAULT_VALUE) String token,
                                 @RequestParam(value = "title", required = false, defaultValue = Constant.DEFAULT_VALUE) String title,
