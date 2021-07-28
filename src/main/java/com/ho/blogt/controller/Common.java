@@ -7,6 +7,8 @@ import com.ho.blogt.enums.ErrorCodeAndMsg;
 import com.ho.blogt.exception.HttpException;
 import com.ho.blogt.service.ImageService;
 import com.ho.blogt.utils.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.security.MessageDigest;
 import java.util.Date;
 
@@ -27,7 +33,7 @@ import java.util.Date;
 public class Common {
     @Autowired
     ImageService imageService;
-
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     public Response uploadImage(@RequestParam("file") MultipartFile file) {
@@ -37,8 +43,8 @@ public class Common {
             throw new HttpException(ErrorCodeAndMsg.NOT_IMAGE);
         }
         fileName = fileUtil.getFileName(fileName);
-        String path = "static\\upload\\image\\";
-        String filePath = fileUtil.getUploadPath() + "\\" + path;
+        String path = "static/upload/image/";
+        String filePath = fileUtil.getUploadPath() + "/" + path;
         //设置文件上传路径
         if (file.isEmpty()) {
             throw new HttpException(ErrorCodeAndMsg.IMAGE_NULL);
@@ -76,17 +82,27 @@ public class Common {
         }
     }
 
-//    @RequestMapping(value = "/imgShow", method = RequestMethod.GET)
-//    public void imgShow(String imgPath, HttpServletResponse response) {
-//        try {
-//            ServletOutputStream out = response.getOutputStream();
-//　　　　　　 FastDFSClient fdfsClient = new FastDfSClient();
-//　　　　　　 byte[] bytes = fdfsClient.downloadFile(imgPath);
-//　　　　　　 out.write(bytes);
-//　　　　　　 out.flush();
-//　　　　　　 out.close();
-//        } catch (Exception e) {
-//            log.error("获取图片异常！{}", e);
-//        }
-//    }
+    @RequestMapping(value = "/imgShow", method = RequestMethod.GET)
+    public void imgShow(String imgPath, HttpServletResponse response) {
+        File file = new File(imgPath);
+        String suffixName = imgPath.substring(imgPath.lastIndexOf("."));
+        if (!(file.exists() && file.canRead())){
+            // 文件不存在或者无法读取
+        }
+        FileInputStream inputStream = null;
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            inputStream = new FileInputStream(file);
+            response.setContentType("it=utf-mage/png;charset=utf-8");
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = inputStream.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            logger.error("获取图片异常！{}", e);
+        }
+    }
 }

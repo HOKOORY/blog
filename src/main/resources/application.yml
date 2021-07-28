@@ -24,9 +24,14 @@ spring:
         max-idle: 8
         min-idle: 0
     database: 0
-#  data:
-#    mongodb:
+  data:
+    mongodb:
+      uri: mongodb+srv://hokoory:HEjiale5201314@cluster0.fyrww.mongodb.net/ho
 #      uri: mongodb+srv://hokoory:HEjiale5201314@cluster0.fyrww.azure.mongodb.net/ho?retryWrites=true&w=majority
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
 # Mybatis 配置
 mybatis:
   mapper-locations: classpath:/**/*.xml

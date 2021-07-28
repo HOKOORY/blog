@@ -59,7 +59,9 @@ public class FileUtil {
         imageType.add(".png");
         imageType.add(".jpg");
         imageType.add(".jpeg");
-        String a = fileName.substring(index);
-        return imageType.contains(fileName.substring(index));
+        imageType.add(".gif");
+        imageType.add(".bmp");
+        String suffixName = fileName.substring(index);
+        return imageType.contains(suffixName.toLowerCase());
     }
 }
