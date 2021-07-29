@@ -87,12 +87,13 @@ public class Common {
     public void imgShow(String imgPath, HttpServletResponse response) {
         File file = new File(imgPath);
         String suffixName = imgPath.substring(imgPath.lastIndexOf("."));
-        if (!(file.exists() && file.canRead())){
+        if (!(file.exists() && file.canRead())) {
             // 文件不存在或者无法读取
         }
         FileInputStream inputStream = null;
+        ServletOutputStream out = null;
         try {
-            ServletOutputStream out = response.getOutputStream();
+            out = response.getOutputStream();
             inputStream = new FileInputStream(file);
             response.setContentType("it=utf-mage/png;charset=utf-8");
             int len = 0;
@@ -101,12 +102,17 @@ public class Common {
                 out.write(buffer, 0, len);
             }
             out.flush();
-            out.close();
+
         } catch (Exception e) {
             logger.error("获取图片异常！{}", e);
-        }finally {
+        } finally {
             try {
-                inputStream.close();
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
