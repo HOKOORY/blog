@@ -84,7 +84,9 @@ public class Common {
     }
 
     @RequestMapping(value = "/imgShow", method = RequestMethod.GET)
-    public void imgShow(String imgPath, HttpServletResponse response) {
+    public void imgShow(String imgSha512, HttpServletResponse response) {
+        Image image = imageService.getImageBySha512(imgSha512);
+        String imgPath = image.getFileName();
         File file = new File(imgPath);
         String suffixName = imgPath.substring(imgPath.lastIndexOf("."));
         if (!(file.exists() && file.canRead())) {
